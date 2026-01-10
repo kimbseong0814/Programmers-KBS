@@ -28,20 +28,25 @@
 
 ```html
 <p style="color: red;">텍스트</p>
-② 내부 스타일 시트 (internal style sheet)
+```
+
+### ② 내부 스타일 시트 (internal style sheet)
 
 HTML 문서 안에 <style> 태그로 작성
 
+```html
 <style>
 p {
   color: rgb(14, 0, 139);
 }
 </style>
+```
 
-③ 외부 스타일 시트 (external style sheet)
+### ③ 외부 스타일 시트 (external style sheet)
 
 CSS를 별도 파일로 작성 후 연결
 
+```html
 <link rel="stylesheet" href="login.css">
 
 ```
@@ -161,4 +166,5 @@ let element = document.getElementById("txt_id");
 
 변수는 데이터를 임시로 저장하고
 이후 코드에서 재사용하기 위해 사용한다.
+
 
