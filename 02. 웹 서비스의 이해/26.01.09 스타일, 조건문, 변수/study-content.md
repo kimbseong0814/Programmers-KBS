@@ -44,11 +44,6 @@ CSS를 별도 파일로 작성 후 연결
 
 <link rel="stylesheet" href="login.css">
 
-
-가장 많이 사용하는 방식 ⭕
-
-유지보수에 유리
-
 ```
 ---
 
@@ -166,3 +161,4 @@ let element = document.getElementById("txt_id");
 
 변수는 데이터를 임시로 저장하고
 이후 코드에서 재사용하기 위해 사용한다.
+
