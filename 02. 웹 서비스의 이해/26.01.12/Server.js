@@ -6,7 +6,7 @@ function start(route, handle) {
 
     function onRequire(request, response) {
         let pathname = url.parse(request.url).pathname;
-        route(pathname, handle);
+        route(pathname, handle, response);
     }
 
     http.createServer(onRequire).listen(8888);
