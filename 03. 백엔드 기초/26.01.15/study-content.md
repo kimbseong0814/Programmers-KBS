@@ -45,11 +45,16 @@
 * 행동은 HTTP Method로 표현
 
 ### 예시 (상품 API)
-*  기능          HTTP   Method   URL
+
+```html
+  기능          HTTP   Method   URL
 * 상품          등록    POST    /products
+  
 * 전체 상품     조회     GET    /products
+  
 * 전체 상품     삭제    DELETE  /products
 
+```
 URL에 동작(등록, 조회, 삭제)을 넣지 않는다  
 동작은 HTTP Method로 표현한다
 
