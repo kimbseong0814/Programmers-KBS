@@ -65,6 +65,7 @@ Programmers-KBS/
 
 ---
 * API 개념과 HTTP 요청 구조
+* Method, Node.js 특징징
  
 📁 03. 백엔드 기초
 
