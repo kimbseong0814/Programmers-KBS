@@ -151,3 +151,22 @@ app.get('/:id', (req, res) => {
 
 - 이후 단어 첫 글자 대문자
 
+---
+
+## 실습
+### 1. params-demo.js / 10보다 작은 수 입력, 10보다 큰 수 입력
+<img width="545" height="455" alt="스크린샷 2026-01-21 150825" src="https://github.com/user-attachments/assets/bd8dc789-545c-41ea-b1d7-c213c194f93c" />
+
+
+<img width="545" height="450" alt="스크린샷 2026-01-21 150840" src="https://github.com/user-attachments/assets/9b90bcf6-f3ac-419f-9ac6-8836079f2251" />
+
+---
+
+### 2. object-api-demo.js / youtuber nickname으로 호출
+<img width="514" height="126" alt="스크린샷 2026-01-21 140010" src="https://github.com/user-attachments/assets/53fccf6c-149f-4a80-a91b-e86804b9178f" />
+
+### 3. map-demo.js / 존재하는 product 호출, 존재하지 않는 product 호출
+<img width="254" height="101" alt="스크린샷 2026-01-21 150925" src="https://github.com/user-attachments/assets/4143badb-3921-4b38-80be-00ca7fa54a57" />
+
+<img width="330" height="108" alt="스크린샷 2026-01-21 150936" src="https://github.com/user-attachments/assets/87850f1a-e0fa-4330-905a-3fc80b42037e" />
+
