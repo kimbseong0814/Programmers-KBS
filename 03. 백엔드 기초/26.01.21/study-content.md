@@ -165,6 +165,8 @@ app.get('/:id', (req, res) => {
 ### 2. object-api-demo.js / youtuber nickname으로 호출
 <img width="514" height="126" alt="스크린샷 2026-01-21 140010" src="https://github.com/user-attachments/assets/53fccf6c-149f-4a80-a91b-e86804b9178f" />
 
+---
+
 ### 3. map-demo.js / 존재하는 product 호출, 존재하지 않는 product 호출
 <img width="254" height="101" alt="스크린샷 2026-01-21 150925" src="https://github.com/user-attachments/assets/4143badb-3921-4b38-80be-00ca7fa54a57" />
 
