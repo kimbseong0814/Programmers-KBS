@@ -1,125 +1,153 @@
-# 오늘 강의 내용(26.01.19)
+## 1. Express란?
 
-## 객체(Object)란 무엇인가
+Express는 Node.js 환경에서 HTTP 서버를 빠르고 간단하게 구축할 수 있도록 도와주는 웹 프레임워크입니다.
 
-### 01. 객체의 핵심 개념
+### 특징
+- 서버 생성 및 실행이 간단함
+- URL(라우트) 단위로 요청 처리 가능
+- Request / Response 객체 제공
 
-- 객체는 **데이터를 하나씩 따로 보내는 것이 아니라**
-    
-    → **관련된 데이터를 묶어서 하나의 덩어리로 다루는 방식**이다.
-    
-- 즉, **의미 있는 데이터 묶음**이 객체다.
+```js
+import express from 'express'
 
----
+const app = express()
 
-### 02. 객체 예시
-
-**“Node.js를 공부해보자”라는 책**
-
-이 책을 데이터로 표현하면:
-
-- 상품명
-- 상품 가격
-- 상품 소개
-
-이처럼 **하나의 대상(책)**에 대한 여러 정보를
-
-**하나로 묶은 것**이 객체다.
+app.listen(814, () => {
+  console.log('814 포트에서 서버 구동 중')
+})
 
 ```
-객체 = 대상 + 그 대상의 속성들
+---
+
+## 2. Params (req.params)
+### 개념
+- URL 경로에 포함된 동적 값을 읽는 방식
+
+- 주로 특정 리소스를 식별할 때 사용
 ```
-
----
-
-### 03. 객체의 중요한 관점
-
-- 우리 세상은 객체로 이루어져 있다
-- 사람, 책, 자동차, 강의, 주문, 회원 → 전부 객체
-- 객체는 **주어 자리에 올 수 있는 대상**
-
-> “주어 자리에 왔을 때 문장이 만들어지면 그건 다 객체다”
-> 
-
-예시:
-
-- **사람이** 걷는다
-- **책이** 팔린다
-- **회원이** 로그인한다
-
-→ 주어가 되는 대상 = 객체
-
----
-
-## JSON이란 무엇인가
-
-### 01. JSON의 정체
-
-- JSON은 **자바스크립트 객체의 생김새(형태)**를 말한다
-- 정확히는:
-    - 데이터를 **어떤 구조로 표현할 것인가**에 대한 규칙
-
+app.get('/:id', (req, res) => {
+  const { id } = req.params
+})
 ```
-JSON = JavaScript Object Notation
+### 숫자 Params 예제
 ```
+app.get('/products/:n', (req, res) => {
+  if (req.params.n > 10) {
+    console.log('10보다 큼')
+  } else {
+    console.log('10보다 작음')
+  }
 
----
-
-### 02. JavaScript 객체 예시
-
-```jsx
-let person = {
-name:"KBS",
-age:20
-};
+  let number = parseInt(req.params.n - 10)
+  res.json({ num: number })
+})
 ```
-
-구성 요소 설명:
-
-- `person` → 객체 이름
-- `{ }` → 객체의 시작과 끝
-- `name`, `age` → 키(key)
-- `"KBS"`, `20` → 값(value)
-
-**→ 키 : 값 형태로 데이터를 표현**
+⚠️ req.params 값은 기본적으로 문자열이므로 숫자 연산 시 형 변환 필요
 
 ---
 
-### 03. 왜 JSON을 쓰는가
+## 3. Query (req.query)
+### 개념
+- URL 뒤에 붙는 ?key=value 형태의 데이터
 
-- 서버 ↔ 클라이언트 간 데이터 전달 표준
-- 문자열 기반이라 네트워크 통신에 적합
-- 언어가 달라도 구조가 동일
-
----
-
-## URL 파라미터란 무엇인가
-
-### 01. URL 파라미터 개념
-
-- URL 뒤에 붙여서 **서버에 추가 정보를 전달하는 방식**
-- 주로 **조회 조건, 식별자(id)** 전달에 사용
-
----
-
-### 02. URL 파라미터 형태
+- 필터링, 옵션 전달에 적합
 
 ```
-http://localhost:814/user?id=1
+app.get('/watch', (req, res) => {
+  const { v, t } = req.query
+
+  res.json({
+    video: v,
+    timeline: t ?? null
+  })
+})
 ```
-
-구성:
-
-- `?` : 파라미터 시작
-- `id` : 키
-- `1` : 값
-
-→ 서버는 이 값을 받아서 처리한다
-
 ---
 
-### 03. 왜 URL 파라미터를 쓰는가
+## 4. 객체 비구조화 (Object)
+객체의 속성을 변수로 바로 추출하는 문법입니다.
+```
+const { nickname } = req.params
+```
 
-- GET 요청은 **몸통(body)이 없음**
-- 그래서 정보는 URL에 실어서 보냄
-- 특정 데이터 조회에 적합
+### 유튜버 정보 예제
+```
+app.get('/:nickname', (req, res) => {
+  const { nickname } = req.params
+
+  if (nickname == '@15ya.fullmoon') {
+    res.json(youtuber1)
+  } else if (nickname == '@ChimChakMan_Official') {
+    res.json(youtuber2)
+  } else {
+    res.json({ message: '저희가 모르는 유튜버입니다.' })
+  }
+})
+```
+---
+## 5. 배열 비구조화 (Array)
+배열의 요소를 순서대로 변수에 할당합니다.
+
+```
+const array = [1, 2, 3, 4, 5]
+const [, num2, num3, , num5] = array
+
+console.log(num2) // 2
+console.log(num3) // 3
+console.log(num5) // 5
+```
+---
+## 6. JavaScript Map
+### Map이란?
+- key-value 쌍으로 데이터를 저장하는 자료구조
+
+- key의 타입을 구분함
+```
+let db = new Map()
+
+db.set(1, 'NoteBook')
+db.set(2, 'Cup')
+db.set(3, 'Chair')
+db.set('1', 'KBS')
+```
+### Map + Params 예제
+```
+app.get('/:id', (req, res) => {
+  let { id } = req.params
+  id = parseInt(id)
+
+  if (db.get(id) == undefined) {
+    res.json({ message: '없는 상품입니다.' })
+  } else {
+    res.json({ id, productName: db.get(id) })
+  }
+})
+```
+---
+## 7. 네이밍 컨벤션
+### 7-1️. snake-case (하이픈 케이스)
+폴더명 / 파일명
+
+- demo-api
+
+- object-api-demo.js
+
+특징
+
+- 소문자 사용
+
+- 단어 구분은 -
+
+### 7-2️. camelCase
+변수명 / 함수명
+
+- channelTitle
+
+- videoNum
+
+특징
+
+- 첫 단어 소문자
+
+- 이후 단어 첫 글자 대문자
+
