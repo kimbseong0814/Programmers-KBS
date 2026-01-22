@@ -1,167 +1,186 @@
-# 오늘 강의 내용(26.01.21)
+# 오늘 강의 내용(26.01.22)
 
-1. Express란?
+## 1) Map Object (JavaScript Map)
 
-Express는 Node.js 환경에서 HTTP 서버를 빠르고 간단하게 구축할 수 있도록 도와주는 웹 프레임워크입니다.
+Map은 key-value(키-값) 쌍을 저장하는 컬렉션입니다. 
 
-특징
+배열/객체와 달리 키로 다양한 타입(숫자, 객체 등)을 그대로 쓸 수 있고, set()/get()으로 다룹니다.
 
-서버 생성 및 실행이 간단함
+### 핵심 메서드
 
-URL(라우트) 단위로 요청 처리 가능
+- new Map() : 맵 생성
 
-Request / Response 객체 제공
+- set(key, value) : 저장
 
-import express from 'express'
+- get(key) : 조회 (없으면 undefined)
 
+- has(key) : 존재 여부
 
-const app = express()
+- delete(key) / clear() : 삭제
 
+- size : 개수
 
-app.listen(814, () => {
-  console.log('814 포트에서 서버 구동 중')
-})
-2. Params (req.params)
-개념
+### 코드 예시 (강의 코드 기반)
+map_demo.js에서 상품 데이터를 Map에 저장하고 get()으로 꺼내는 흐름입니다. 
 
-URL 경로에 포함된 동적 값을 읽는 방식
+```js
 
-주로 특정 리소스를 식별할 때 사용
-
-app.get('/:id', (req, res) => {
-  const { id } = req.params
-})
-숫자 Params 예제
-app.get('/products/:n', (req, res) => {
-  if (req.params.n > 10) {
-    console.log('10보다 큼')
-  } else {
-    console.log('10보다 작음')
-  }
-
-
-  let number = parseInt(req.params.n - 10)
-  res.json({ num: number })
-})
-
-⚠️ req.params 값은 기본적으로 문자열이므로 숫자 연산 시 형 변환 필요
-
-3. Query (req.query)
-개념
-
-URL 뒤에 붙는 ?key=value 형태의 데이터
-
-필터링, 옵션 전달에 적합
-
-app.get('/watch', (req, res) => {
-  const { v, t } = req.query
-
-
-  res.json({
-    video: v,
-    timeline: t ?? null
-  })
-})
-4. 객체 비구조화 (Object Destructuring)
-
-객체의 속성을 변수로 바로 추출하는 문법입니다.
-
-const { nickname } = req.params
-유튜버 정보 예제
-app.get('/:nickname', (req, res) => {
-  const { nickname } = req.params
-
-
-  if (nickname == '@15ya.fullmoon') {
-    res.json(youtuber1)
-  } else if (nickname == '@ChimChakMan_Official') {
-    res.json(youtuber2)
-  } else {
-    res.json({ message: '저희가 모르는 유튜버입니다.' })
-  }
-})
-5. 배열 비구조화 (Array Destructuring)
-
-배열의 요소를 순서대로 변수에 할당합니다.
-
-const array = [1, 2, 3, 4, 5]
-const [, num2, num3, , num5] = array
-
-
-console.log(num2) // 2
-console.log(num3) // 3
-console.log(num5) // 5
-6. JavaScript Map
-Map이란?
-
-key-value 쌍으로 데이터를 저장하는 자료구조
-
-key의 타입을 구분함
+map_demo
 
 let db = new Map()
 
+let NoteBook = { productName: "NoteBook", price: 200000 }
+db.set(1, NoteBook)
 
-db.set(1, 'NoteBook')
-db.set(2, 'Cup')
-db.set(3, 'Chair')
-db.set('1', 'KBS')
-Map + Params 예제
-app.get('/:id', (req, res) => {
+console.log(db.get(1)) 
+
+```
+---
+## 2) Express + 객체 (Object)
+
+Express는 Node.js에서 HTTP 서버를 빠르게 만들기 위한 웹 프레임워크입니다.
+
+Express의 라우팅 핸들러는 (req, res) => { ... } 형태로 동작하고, 
+
+응답은 res.send() 또는 res.json() 등으로 반환합니다.
+
+### 가장 기본 구조 (Hello World)
+
+app.js는 Express 서버 기본 뼈대 예시입니다. 
+
+```js
+const express = require('express')
+const app = express()
+const port = 1234
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+```
+---
+## 3) Express + Map + 객체 (간단 DB처럼 쓰기)
+
+강의에서 한 방식은 다음 아이디어입니다.
+
+- 객체(Object) : 실제 데이터(상품/유튜버 정보)
+
+- Map : “id → 객체”로 매핑해서 저장
+
+- Express : /:id로 들어온 요청에서 req.params.id를 읽어서 Map에서 조회 후 JSON 응답
+
+req.params는 라우트 경로의 파라미터를 담는 객체입니다.
+
+### (1) 상품 조회 예시
+
+map_demo.js는 /:id 요청을 받아서 db.get(id)로 상품을 찾고 없으면 메시지를 반환합니다. 
+
+
+- 포인트: req.params.id는 기본적으로 문자열이므로, 숫자 키를 쓰면 parseInt()로 변환해야 합니다.
+
+- 조회 결과가 undefined면 “없는 데이터” 처리.
+  
+```js
+app.get('/:id', (req, res) => { 
   let { id } = req.params
   id = parseInt(id)
 
-
   if (db.get(id) == undefined) {
-    res.json({ message: '없는 상품입니다.' })
+    res.json({ message: "없는 상품입니다." })
   } else {
-    res.json({ id, productName: db.get(id) })
+    const product = db.get(id)
+    product["id"] = id
+    res.json(product)
   }
 })
-7. 네이밍 컨벤션
-1️⃣ snake-case (하이픈 케이스)
+```
 
-폴더명 / 파일명
+### (2) 유튜버 조회 예시 (REST 형태)
 
-demo-api
-object-api-demo.js
+youtuber_demo.js도 동일 패턴이며, Map에 유튜버 객체를 넣고 id로 조회합니다. 
 
-특징
+```js
+app.get('/youtuber1/:id', (req, res) => {
+  let {id} = req.params
+  id = parseInt(id)
 
-소문자 사용
+  const youtuber = db.get(id)
+  if (youtuber == undefined) {
+    res.json({ message: "유튜버 정보를 찾을 수 없습니다." })
+  } else {
+    res.json(youtuber)
+  }
+})
+```
+---
+## 4) Express 구조 이해 (요청이 들어오면 내부에서 무슨 일이 일어나는가)
 
-단어 구분은 -
+Express 앱의 기본 흐름은 아래처럼 이해하면 깔끔합니다.
 
-2️⃣ camelCase
+### 1. 서버 생성
 
-변수명 / 함수명
+- const app = express() 로 “서버 앱 객체” 생성
 
-channelTitle
-videoNum
 
-특징
+### 2. 라우팅 등록
 
-첫 단어 소문자
+- app.get('/path', handler) 처럼 HTTP 메서드 + 경로에 핸들러 연결
+  
 
-이후 단어 첫 글자 대문자
+### 3. 요청(Request) → 라우터 매칭
 
-정리
+- 클라이언트가 요청하면 Express가 “경로/메서드”에 맞는 핸들러를 찾음
+  
 
-Express는 Node.js 서버 프레임워크
+### 4. 핸들러 실행
 
-req.params는 URL 경로 값
+- (req, res) => { ... } 실행
 
-req.query는 쿼리 스트링
+- req.params, req.query, req.body 같은 입력을 읽고,
 
-비구조화는 객체/배열 값 추출 문법
+- res.send()/res.json()으로 응답 반환
+  
 
-Map은 key 타입을 구분하는 자료구조
+### 5. 리스닝 시작
+- app.listen(port, callback) 으로 포트 바인딩하고 요청 대기
 
-네이밍 규칙은 통일성 유지가 핵심
+---
+## 5) 자바스크립트 함수 4가지 종류 (강의 코드 기준)
 
-학습 목적
+function_demo.js에 4가지 형태가 모두 들어 있습니다. 
 
-Express 기본 동작 이해
 
-REST API 기초 개념 학습
+1) 함수 선언문 (Function Declaration)
 
-JavaScript 문법 실습 및 구조 이해
+```js
+function add1(x, y) {
+  return x + y
+}
+
+```
+2) 함수 표현식 (Function Expression)
+
+```js
+let add2 = function(x, y) {
+  return x + y
+}
+```
+
+3) 화살표 함수 (Arrow Function) - 블록 바디
+
+```js
+const add3 = (x, y) => {
+  return x + y
+}
+```
+
+4) 화살표 함수 (Arrow Function) - 표현식 바디(축약형)
+
+```js
+var add4 = (x, y) => x + y
+```
+
+추가로, 화살표 함수는 일반 함수와 완전히 동일하지는 않고(예: this 바인딩 차이 등) “간결한 문법 + 특정 제약”이 있습니다.
