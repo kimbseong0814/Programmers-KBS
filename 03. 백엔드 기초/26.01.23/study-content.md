@@ -73,3 +73,17 @@ app.post('/youtuber', (req, res) => {
 - Map을 DB처럼 사용해 데이터 저장
 
 - 저장 완료 메시지 반환
+
+## 실습 결과
+
+### 1. 유튜버 아이디 조회
+<img width="457" height="523" alt="스크린샷 2026-01-22 153329" src="https://github.com/user-attachments/assets/f66ca328-aada-4006-ba0c-01cbe05fa962" />
+
+### 2. 존재하지 않는 유튜버 조회 결과
+<img width="449" height="439" alt="스크린샷 2026-01-22 153340" src="https://github.com/user-attachments/assets/c03bb3b9-8715-49d0-bbd3-10d276701aab" />
+
+### 3. 유튜버 등록
+<img width="461" height="491" alt="스크린샷 2026-01-23 112954" src="https://github.com/user-attachments/assets/9381337d-12fe-4826-998e-b6313b9e6552" />
+
+### 4. 유튜버 등록 후 조회
+<img width="483" height="562" alt="스크린샷 2026-01-23 113030" src="https://github.com/user-attachments/assets/8e37e1ff-9f29-40f7-999c-8e972a373aef" />
