@@ -148,3 +148,54 @@ res.status(404).json({
 ```
 
 - 상태 코드는 클라이언트와 서버의 약속(Protocol) 이다.
+
+---
+
+### 1. 유튜버 삭제 (DELETE)
+DELETE 요청
+<img width="233" height="224" alt="스크린샷 2026-01-23 151745" src="https://github.com/user-attachments/assets/fb2d3e27-f89f-4d0e-93a8-3f2e3b64205d" />
+
+```
+db.delete(id);
+```
+
+- Map의 delete() 메서드를 이용해 데이터 삭제
+
+- 삭제 성공 시 메시지 응답
+
+- 상태 코드: 200 OK
+
+---
+### 2. 유튜버 정보 수정 (PUT)
+PUT 요청
+<img width="261" height="265" alt="스크린샷 2026-01-23 151808" src="https://github.com/user-attachments/assets/7ccfde50-5486-46ef-ba26-c4750202d50d" />
+
+
+
+요청 Body:
+```
+{
+  "channelTitle": "쉬고 싶다"
+}
+```
+
+- 기존 데이터 수정
+
+- POST는 생성, PUT은 수정이라는 차이를 실습으로 확인
+
+### 3. 수정 후 전체 조회 확인
+<img width="260" height="284" alt="스크린샷 2026-01-23 161900" src="https://github.com/user-attachments/assets/8c1d0ee3-00f4-4fd9-90c6-527f6b70162e" />
+
+
+<img width="264" height="204" alt="스크린샷 2026-01-23 161842" src="https://github.com/user-attachments/assets/a297d237-bbb3-435e-9220-053c8adb33ff" />
+
+
+<img width="271" height="234" alt="스크린샷 2026-01-23 161917" src="https://github.com/user-attachments/assets/f748788f-ed1d-4ed1-a6ff-8901a2b68c14" />
+
+PUT 요청 이후 데이터가 정상적으로 변경된 것을 확인
+
+
+---
+
+## 오늘 배운 점 요약 및 느낀 점
+Express를 이용해 REST API의 기본 구조를 직접 구현해보며 GET, POST, PUT, DELETE의 차이를 명확히 이해할 수 있었습니다. 특히 Postman으로 요청을 직접 보내고 응답을 확인하면서 서버 동작 흐름이 눈에 들어왔습니다. 단순 문법이 아니라 실제 API 흐름을 이해하는 계기가 되었습니다.
