@@ -196,7 +196,7 @@ app.route('/channels')
 같은 URL을 묶어서 관리
 
 
-## 5. route 구조 한 눈에 보기
+## 5. route 구조
 
 ```js
 app.route('/channels')
