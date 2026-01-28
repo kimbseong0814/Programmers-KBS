@@ -85,7 +85,6 @@ app
             userId : user.userId,
             name : user.name
         })
-        res.json(user)
     }
 })
 
@@ -105,7 +104,6 @@ app
         res.status(200).json({
             message : `${user.name}님 다음에 또 뵙겠습니다.`
         })
-        res.json(user)
     }
 })
 
