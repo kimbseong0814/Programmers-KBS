@@ -18,7 +18,7 @@ var loginUser = {}
 이걸 판단하는 방법이 3가지.
 
 ---
-## 빈 객체 확인 방법 ① Object.keys()
+## ① Object.keys() 빈 객체 확인 방법
 🔹 개념
 
 Object.keys(객체)
@@ -52,7 +52,7 @@ Object.keys(obj).length === 0
 
 ---
 
-## 빈 객체 확인 방법 ② for문(for...in)
+## ② for문(for...in) 빈 객체 확인 방법 
 🔹 개념
 
 객체에 하나라도 key가 있으면
@@ -87,7 +87,7 @@ function isEmpty(obj) {
 개념 설명용으로는 좋지만, 실무에선 ①번이 더 많이 쓰임
 
 ---
-## 빈 객체 확인 방법 ③ lodash – isEmpty()
+## ③ lodash – isEmpty() 빈 객체 확인 방법 
 🔹 개념
 
 외부 라이브러리 lodash에서 제공하는 함수
