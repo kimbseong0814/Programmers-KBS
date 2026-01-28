@@ -85,7 +85,7 @@ if (channelTitle) {
 }
 ```
 ---
-## Route(라우트)란?
+## Route란?
 
 **Route = HTTP 메서드 + URL 경로 조합이다.**
 
