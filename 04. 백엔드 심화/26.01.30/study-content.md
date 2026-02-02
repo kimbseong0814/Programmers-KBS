@@ -149,6 +149,5 @@ post 테이블에 **User의 PK를 FK**로 저장한다.
 
   - 확장성 있는 구조를 만들 수 있다.
  
- ## 캡처
- <img width="810" height="540" alt="스크린샷 2026-01-30 151736" src="https://github.com/user-attachments/assets/8283f489-fab2-404d-a3fe-fb4454e8b698" />
+
 
