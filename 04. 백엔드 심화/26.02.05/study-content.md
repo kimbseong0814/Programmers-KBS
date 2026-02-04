@@ -240,6 +240,8 @@ Authorization: Bearer JWT
     - 관리자 페이지 → 관리자 권한 필요
     - 마이페이지 → 로그인 사용자만 가능
 
+
+---
 ## 7. env
 
 - JWT 비밀키, 설정값을 코드 밖에서 관리
@@ -277,13 +279,13 @@ maxAge:JWT 만료시간과 동일
 document.cookie ❌
 ```
 
----
-
 ### ② secure
 
 - HTTPS에서만 쿠키 전송
 - 배포 환경에서는 반드시 `true`
 
+
+---
 ## 9. JWT 유효기간
 
 - `expiresIn`으로 설정
