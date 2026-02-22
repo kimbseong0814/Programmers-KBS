@@ -1,297 +1,48 @@
-# 강의 내용 (26.02.05)
+# 1) 구현 결과 요약(26.02.25)
 
-# 로그인 · 세션 · 인증과 인가 / JWT
+## 구현 기능: 장바구니 상품 목록 조회 (Cart Items List)
 
-## 1. 인증(Authentication)과 인가(Authorization)
+- **라우팅**
+    - `GET /carts` : 장바구니 아이템 목록 조회 / 선택한 장바구니 상품 목록 조회 carts
+- **조회 로직**
+    - `cartitems` 테이블과 `books` 테이블을 `LEFT JOIN`하여
+        - 장바구니 아이템 id, book_id, quantity(장바구니 수량)
+        - 도서 title, summary, price(도서 정보)
+            
+            를 한 번에 조회 
+            CartController
+            
+    - `WHERE cartitems.user_id = ? AND cartitems.id IN (?)` 조건으로
+        - 특정 사용자 기준
+        - 선택한 장바구니 아이템만 필터링 CartController
 
-### 인증 (Authentication)
+---
+## 함께 구현된 기능
 
-> **이 사용자가 누구인지 증명하는 과정**
-> 
-- 로그인
-- 사이트에 가입된 사용자임을 확인
-- 예시:
-    - 쇼핑몰 상품 보기 ❌ (인증 필요 없음)
-    - 상품 구매 ⭕
-    - 마이페이지 ⭕
+- `POST /carts` : 장바구니 담기 (book_id, quantity, user_id 저장) carts CartController
+- `DELETE /carts/:id` : 장바구니 항목 삭제
 
-→ **로그인이 되어 있는 상태 = 인증 완료**
+---
+## 결과
+### 장바구니 담기 
+- POST /carts로 book_id, quantity, user_id를 받아 cartitems 테이블에 저장. 
+
+<img width="373" height="592" alt="스크린샷 2026-02-22 131016" src="https://github.com/user-attachments/assets/a4f6977a-ffe5-485a-9569-72bbc5f9d54e" />
 
 ---
 
-### 인가 (Authorization)
+### 장바구니 상품 목록 조회
+- GET /carts에서 cartitems와 books를 LEFT JOIN해 장바구니 id, 수량 + 도서(title, summary, price) 정보를 한 번에 조회. 
 
-> **이 사용자가 이 기능/페이지에 접근할 권한이 있는지 확인**
-> 
-- 인증 이후에 수행됨
-- 같은 로그인 상태라도 권한은 다를 수 있음
+### 선택한 장바구니 상품만 조회 
+- user_id와 selected(장바구니 item id 목록) 조건을 적용해 cartitems.id IN (...) 형태로 선택 구매용 목록 필터링 조회 구현. 
 
-### 예시
-
-- 관리자 / 일반 사용자
-- 관리자만 접근 가능한 페이지
-- 고객 전용 페이지
-
-→ 흐름 정리
-
-1. **인증**: 이 사람은 우리 사이트 회원인가?
-2. **인가**: 이 사람이 이 페이지 접근 권한이 있는가?
-
-## 2. Cookie란?
-
-**Cookie**는 웹에서 **서버와 클라이언트(브라우저)가 주고받는 데이터** 중 하나이다.
-
-- 쿠키는 **서버가 생성**해서 **클라이언트(브라우저)** 에 전달한다.
-- 브라우저는 쿠키를 **자기 로컬 메모리(또는 디스크)** 에 저장한다.
-- 이후 **같은 서버에 요청할 때마다 쿠키를 자동으로 함께 전송**한다.
-
-### 쿠키 동작 흐름
-
-1. 사용자가 로그인 요청
-2. 서버가 쿠키 생성
-3. 브라우저가 쿠키 저장
-4. 이후 요청마다 쿠키를 서버로 전송 (핑퐁 구조)
-
-### 쿠키 특징 요약
-
-- **서버는 상태를 저장하지 않음 (Stateless)**
-- 서버 저장 공간을 사용하지 않음
-- RESTful 구조에 적합
-
-### 쿠키 장단점
-
-**장점**
-
-- 서버 저장 공간 필요 없음
-- Stateless → 확장성 좋음
-
-**단점**
-
-- 쿠키 탈취 시 보안 취약
-- 중요한 정보 저장에 부적합
+<img width="504" height="613" alt="스크린샷 2026-02-22 131852" src="https://github.com/user-attachments/assets/09d6cdc4-6452-4bd7-99cd-751df06a3937" />
 
 ---
+### 장바구니 항목 삭제  
+- DELETE /carts/:id로 특정 장바구니 item을 삭제.
 
-## 3. Session이란?
+<img width="1469" height="633" alt="스크린샷 2026-02-22 131938" src="https://github.com/user-attachments/assets/9d41a175-be69-4aa8-a466-7682bd749dcc" />
 
-쿠키 방식의 보안 문제를 해결하기 위해 나온 개념이 **Session**이다.
 
-### 세션의 핵심 아이디어
-
-- **중요한 정보는 서버에 저장**
-- 클라이언트는 **Session ID만 쿠키로 보관**
-
-### 세션 동작 흐름
-
-1. 로그인 요청
-2. 서버가 **세션 저장소(Session)** 생성
-3. 세션에 사용자 정보 저장
-4. 세션의 고유 번호(Session ID)를 쿠키로 전달
-5. 이후 요청 시 클라이언트는 Session ID만 전송
-6. 서버가 Session ID로 사용자 정보 조회
-
-### 세션 특징 요약
-
-- 실제 사용자 정보는 서버에 존재
-- 쿠키에는 **주소(세션 ID)** 만 존재
-
-### 세션 장단점
-
-**장점**
-
-- 쿠키보다 보안이 좋음
-
-**단점**
-
-- 서버가 상태를 저장함 (Stateful)
-- 서버 저장 공간 필요
-- 서버 확장 시 부담 증가
-
----
-
-## 4. Cookie vs Session 요약
-
-| 구분 | Cookie | Session |
-| --- | --- | --- |
-| 저장 위치 | 클라이언트 | 서버 |
-| 서버 상태 | Stateless | Stateful |
-| 보안 | 약함 | 상대적으로 좋음 |
-| 서버 부담 | 낮음 | 높음 |
-| 확장성 | 좋음 | 나쁨 |
-
----
-
-## 5. JWT (JSON Web Token)
-
-JWT는 **인증 정보를 JSON 형태로 안전하게 전달하기 위한 토큰 방식**이다.
-
-### JWT 개념
-
-- 서버 상태를 저장하지 않는 **Stateless 인증 방식**
-- 토큰 자체에 인증 정보 포함
-
-### JWT 구조
-
-1. **Header**
-    - 토큰 타입
-    - 서명 알고리즘
-2. **Payload**
-    - 사용자 정보 (이름, 권한 등)
-    - ⚠️ 비밀번호는 포함하지 않음
-3. **Signature**
-    - 토큰 위변조 방지를 위한 서명
-    - 서버만 알고 있는 비밀 키 사용
-
-### JWT 특징
-
-- 서버는 세션을 저장하지 않음
-- 토큰만 검증하면 인증 가능
-- 서버 부하 감소
-- 확장성 매우 좋음
-
-### JWT 장단점
-
-**장점**
-
-- Stateless
-- 서버 확장에 유리
-- 위변조 검증 가능
-
-**단점**
-
-- 토큰 탈취 시 위험
-- 토큰 만료 전까지 강제 로그아웃 어려움
-
----
-
-## 6. JWT 인증 / 인가 절차 정리
-
-### ① 로그인 요청 (Authentication 시작)
-
-- 클라이언트가 로그인 요청 전송
-- 방식: `POST /login`
-- 전송 데이터 (HTTP Body)
-    - `username`
-    - `password`
-
-```
-클라이언트 → 서버
-POST /login
-body: { username, password }
-```
-
----
-
-### ② 서버 내부 로직 처리
-
-- 서버가 사용자 정보 확인
-    - 아이디 존재 여부
-    - 비밀번호 일치 여부
-- 검증 성공 시 **JWT 발급**
-
-→ 이 시점이 **JWT 발행 시점 = 로그인 시점**
-
----
-
-### ③ JWT 발급
-
-- 서버는 JWT를 생성해서 클라이언트에게 전달
-- JWT에는 다음 정보가 포함됨
-    - 사용자 식별 정보
-    - 권한 정보(필요 시)
-    - 만료 시간(exp)
-
-```
-JWT = Header + Payload + Signature
-```
-
----
-
-### ④ 클라이언트 JWT 저장
-
-- 클라이언트는 JWT를 저장
-    - Cookie
-    - 또는 LocalStorage (강의에서는 Cookie 중심)
-
-→ 이 상태가 **“로그인 상태 유지”**
-
----
-
-### ⑤ 이후 요청 (Authorization 단계)
-
-- 클라이언트는 **JWT를 HTTP Header 또는 Cookie에 포함**해서 요청
-- 서버는 요청을 받을 때마다:
-    1. JWT 존재 여부 확인
-    2. JWT 서명(Signature) 검증
-    3. 만료 시간(exp) 확인
-    4. 권한 확인 (인가)
-
-```
-Authorization: Bearer JWT
-```
-
----
-
-### ⑥ 인가(Authorization)
-
-- 인증이 끝난 사용자에 대해:
-    - 이 사용자가 **이 API / 페이지 접근 권한이 있는지** 확인
-- 예:
-    - 관리자 페이지 → 관리자 권한 필요
-    - 마이페이지 → 로그인 사용자만 가능
-
-
----
-## 7. env
-
-- JWT 비밀키, 설정값을 코드 밖에서 관리
-- 보안 목적
-
-```
-JWT_SECRET=secret
-JWT_EXPIRES_IN=1h
-```
-
----
-
-## 8. Cookie 설정 (JWT 저장)
-
-- JWT를 Cookie에 저장할 때 **보안 옵션 설정**
-
-```jsx
-httpOnly:true// JS 접근 차단
-secure:true// HTTPS만 허용
-sameSite:'strict'// CSRF 방지
-maxAge:JWT 만료시간과 동일
-```
-
----
-
-### 옵션별 의미
-
-### ① httpOnly
-
-- JavaScript에서 쿠키 접근 불가
-- XSS 공격 방지
-- **JWT 쿠키 사용 시 필수**
-
-```
-document.cookie ❌
-```
-
-### ② secure
-
-- HTTPS에서만 쿠키 전송
-- 배포 환경에서는 반드시 `true`
-
-
----
-## 9. JWT 유효기간
-
-- `expiresIn`으로 설정
-- 만료되면 재로그인 필요
-- Stateless 보안을 위한 필수 요소
-
-```
-expiresIn:'1h'
-```
