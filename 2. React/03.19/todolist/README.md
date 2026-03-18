@@ -1,46 +1,19 @@
-# Getting Started with Create React App
+## 시계 추가 결과
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+이번 코드에서는 기존 투두리스트 화면에 현재 시간을 보여주는 시계 기능을 추가했다.  
+사용자가 페이지에 접속했을 때 현재 시각을 바로 확인할 수 있도록 구현했으며, 일정 관리 화면과 함께 사용할 수 있게 구성했다.
 
-## Available Scripts
+### 구현 내용
+- 현재 시간을 화면에 출력하는 시계 기능 추가
+- 시간이 1초마다 갱신되도록 설정
+- React의 state를 사용해서 현재 시간 데이터를 관리
+- 컴포넌트가 렌더링될 때 시계가 동작하고, 화면에 실시간으로 반영되도록 구현
 
-In the project directory, you can run:
+### 동작 방식
+처음 화면이 실행되면 현재 시간을 state에 저장한다.  
+이후 일정 시간마다 현재 시간을 다시 가져와 state를 업데이트하고, 변경된 값이 화면에 다시 출력되도록 만들었다.  
+이 방식으로 사용자는 새로고침 없이도 실시간 시간을 확인할 수 있다.
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 느낀 점
+이번 구현을 통해 단순히 데이터를 출력하는 것뿐 아니라, 시간이 지나면서 변하는 값을 화면에 반영하는 방식을 연습할 수 있었다.  
+특히 React에서 state와 주기적인 업데이트를 같이 사용하는 흐름을 익히는 데 도움이 되었다.
